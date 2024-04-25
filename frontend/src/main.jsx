@@ -12,7 +12,7 @@ const router = createBrowserRouter(
             element: <RegisterPage/>
         },
         {
-            path: '/manager/teachers',
+            path: '/manager',
             element: <ManagerPage/>
         }
     ]

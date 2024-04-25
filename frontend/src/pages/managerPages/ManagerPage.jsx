@@ -17,11 +17,11 @@ function getItem(label, key, icon, children, type) {
 
 
 function ManagerPage() {
-    const [current, setCurrent] = useState('0');
     const [subjectOptions, setSubjectOptions] = useState(getItem());
     const [classesOptions, setClassesOptions] = useState(getItem());
     const [teachersComponents, setTeacherComponents] = useState([]);
     const [classesComponents, setClassesComponents] = useState([]);
+
 
     const onClickSubject = (subject) => {
         axios.get(
@@ -32,6 +32,10 @@ function ManagerPage() {
                     name={teacher.name}
                     surname={teacher.surname}
                     middleName={teacher.middle_name}
+                    teacherId={teacher.id}
+                    teacherClass={teacher.teacher_class}
+                    subjects={teacher.subjects}
+                    email={teacher.email}
                 />
             })
             setTeacherComponents(teachers)
@@ -45,6 +49,7 @@ function ManagerPage() {
             const cls = <ClassesComponent
                 name={`${clsInfo.class_number} ${clsInfo.class_word}`}
                 teacher={clsInfo.classroom_teacher}
+                classId={clsInfo.class_id}
             />
             setTeacherComponents([])
             setClassesComponents([cls])
@@ -96,13 +101,16 @@ function ManagerPage() {
                     console.log(item);
                     (item.keyPath[1] === 'subjects') ? onClickSubject(item): onClickClass(item);
                 }}
-                selectedKeys={[current]}
                 mode="inline"
                 items={[subjectOptions, classesOptions]}
 
             />
-            {<Space direction='vertical' style={{justifyContent: 'center'}}>{...teachersComponents}</Space>}
-            {<Space direction='vertical' style={{justifyContent: 'center'}}>{...classesComponents}</Space>}
+            {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                {...teachersComponents}
+            </Space>}
+            {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                {...classesComponents}
+            </Space>}
         </div>
     )
 }
