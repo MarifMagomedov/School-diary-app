@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {Component, useEffect, useState} from "react";
 import axios from "axios";
 import BookOutlined from "@ant-design/icons";
 import {Menu, Space} from "antd";
@@ -16,14 +16,19 @@ function getItem(label, key, icon, children, type) {
 }
 
 
-function ManagerPage() {
-    const [subjectOptions, setSubjectOptions] = useState(getItem());
-    const [classesOptions, setClassesOptions] = useState(getItem());
-    const [teachersComponents, setTeacherComponents] = useState([]);
-    const [classesComponents, setClassesComponents] = useState([]);
+class ManagerPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            subjectOptions: [],
+            classesOptions: [],
+            teachersComponents: [],
+            classesComponents: []
+        }
+        this.handler = this.handler.bind(this)
+    }
 
-
-    const onClickSubject = (subject) => {
+    onClickSubject = (subject) => {
         axios.get(
             `http://localhost:5000/subjects/${subject.key}/teachers`
         ).then(response => {
@@ -34,29 +39,38 @@ function ManagerPage() {
                     middleName={teacher.middle_name}
                     teacherId={teacher.id}
                     teacherClass={teacher.teacher_class}
-                    subjects={teacher.subjects}
+                    subject={subject.key}
                     email={teacher.email}
+                    handler={this.handler}
                 />
             })
-            setTeacherComponents(teachers)
-            setClassesComponents([])
+            this.setState({
+                teachersComponents: teachers,
+                classesComponents: []
+            });
         })
     };
 
-    const onClickClass = (clickCls) => {
+    onClickClass = (clickCls) => {
         axios.get(`http://localhost:5000/classes/class/${clickCls.key}`).then(response => {
             const clsInfo = response.data
             const cls = <ClassesComponent
                 name={`${clsInfo.class_number} ${clsInfo.class_word}`}
                 teacher={clsInfo.classroom_teacher}
-                classId={clsInfo.class_id}
+                classId={clsInfo.id}
             />
-            setTeacherComponents([])
-            setClassesComponents([cls])
+            this.setState({
+                teachersComponents: [],
+                classesComponents: cls
+            });
         })
     }
 
-    const getMenuItems = () => {
+    handler(items) {
+        this.setState({teachersComponents: items});
+    }
+
+    componentDidMount() {
         axios.get('http://localhost:5000/subjects/all').then((response) => {
             const response_subjects = response.data.map((item) => {
                 return getItem(
@@ -65,8 +79,10 @@ function ManagerPage() {
                 );
             })
 
-            setSubjectOptions(
-                getItem('Учителя', 'subjects', <BookOutlined/>, response_subjects)
+            this.setState(
+                {
+                    subjectOptions: getItem('Учителя', 'subjects', <BookOutlined/>, response_subjects)
+                }
             )
         })
 
@@ -74,45 +90,44 @@ function ManagerPage() {
             const response_classes = response.data.map((item) => {
                 return getItem(
                     `${item.class_number} ${item.class_word}`,
-                    item.class_id
+                    item.id
                 );
             })
 
-            setClassesOptions(
-                getItem('Классы', 'classes', <BookOutlined/>, response_classes)
-            );
+            this.setState(
+                {
+                    classesOptions: getItem('Классы', 'classes', <BookOutlined/>, response_classes)
+                }
+            )
         })
     }
 
-    useEffect(() => {
-        getMenuItems()
-    }, []);
+    render(){
+        return (
+            <div style={{display: 'flex', flexFlow: 'row nowrap'}}>
+                <Menu
+                    style={{
+                        width: 256,
+                        height: '100vh',
+                        overflow: 'auto'
+                    }}
+                    selectable
+                    onClick={(item) => {
+                        (item.keyPath[1] === 'subjects') ? this.onClickSubject(item): this.onClickClass(item);
+                    }}
+                    mode="inline"
+                    items={[this.state.subjectOptions, this.state.classesOptions]}
 
-    return (
-        <div style={{display: 'flex', flexFlow: 'row nowrap'}}>
-            <Menu
-                style={{
-                    width: 256,
-                    height: '100vh',
-                    overflow: 'auto'
-                }}
-                selectable
-                onClick={(item) => {
-                    console.log(item);
-                    (item.keyPath[1] === 'subjects') ? onClickSubject(item): onClickClass(item);
-                }}
-                mode="inline"
-                items={[subjectOptions, classesOptions]}
-
-            />
-            {<Space direction='vertical' style={{justifyContent: 'center'}}>
-                {...teachersComponents}
-            </Space>}
-            {<Space direction='vertical' style={{justifyContent: 'center'}}>
-                {...classesComponents}
-            </Space>}
-        </div>
-    )
+                />
+                {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                    {...this.state.teachersComponents}
+                </Space>}
+                {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                    {...this.state.classesComponents}
+                </Space>}
+            </div>
+        )
+    }
 }
 
 export default ManagerPage;
