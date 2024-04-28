@@ -1,9 +1,10 @@
 import {Component, useEffect, useState} from "react";
 import axios from "axios";
-import BookOutlined from "@ant-design/icons";
-import {Menu, Space} from "antd";
-import TeacherComponent from "../../components/managerComponents/TeachersComponent.jsx";
+import {Button, Menu, Space} from "antd";
+import {TeacherComponent} from "../../components/managerComponents/TeacherComponents.jsx";
+import {AddNewTeacher} from "../../components/managerComponents/TeacherComponents.jsx";
 import ClassesComponent from "../../components/managerComponents/ClassesComponent.jsx";
+import {useForm} from "antd/es/form/Form.js";
 
 function getItem(label, key, icon, children, type) {
     return {
@@ -23,7 +24,9 @@ class ManagerPage extends Component {
             subjectOptions: [],
             classesOptions: [],
             teachersComponents: [],
-            classesComponents: []
+            classesComponents: [],
+            showAddTeacherModal: false,
+            openSubject: ''
         }
         this.handler = this.handler.bind(this)
     }
@@ -34,19 +37,34 @@ class ManagerPage extends Component {
         ).then(response => {
             const teachers = response.data.map(teacher => {
                 return <TeacherComponent
+                    teacherId={teacher.id}
                     name={teacher.name}
                     surname={teacher.surname}
                     middleName={teacher.middle_name}
-                    teacherId={teacher.id}
+                    age={teacher.age}
                     teacherClass={teacher.teacher_class}
                     subject={subject.key}
                     email={teacher.email}
                     handler={this.handler}
+                    toogleModal={this.toggleModal}
                 />
             })
+            const button = <Space
+                direction="horizontal"
+                style={{ width: '100%', justifyContent: 'center'}}
+            >
+                <Button
+                    type="primary"
+                    style={{ marginTop: "15px"}}
+                    onClick={this.toggleModal}
+                >
+                    Добавить учителя
+                </Button>
+            </Space>
             this.setState({
-                teachersComponents: teachers,
-                classesComponents: []
+                teachersComponents: [teachers, button],
+                classesComponents: [],
+                openSubject: subject.key
             });
         })
     };
@@ -59,9 +77,10 @@ class ManagerPage extends Component {
                 teacher={clsInfo.classroom_teacher}
                 classId={clsInfo.id}
             />
+            const button = <Button type="primary" >Добавить ученика</Button>
             this.setState({
                 teachersComponents: [],
-                classesComponents: cls
+                classesComponents: [cls, button]
             });
         })
     }
@@ -70,18 +89,24 @@ class ManagerPage extends Component {
         this.setState({teachersComponents: items});
     }
 
+    toggleModal = () => {
+        this.setState(prevState => ({
+            showAddTeacherModal: !prevState.showAddTeacherModal
+        }));
+    }
+
     componentDidMount() {
         axios.get('http://localhost:5000/subjects/all').then((response) => {
             const response_subjects = response.data.map((item) => {
                 return getItem(
                     item.subject_name,
-                    item.subject_name
+                    item.subject_id
                 );
             })
 
             this.setState(
                 {
-                    subjectOptions: getItem('Учителя', 'subjects', <BookOutlined/>, response_subjects)
+                    subjectOptions: getItem('Учителя', 'subjects', null, response_subjects)
                 }
             )
         })
@@ -96,7 +121,7 @@ class ManagerPage extends Component {
 
             this.setState(
                 {
-                    classesOptions: getItem('Классы', 'classes', <BookOutlined/>, response_classes)
+                    classesOptions: getItem('Классы', 'classes', null, response_classes)
                 }
             )
         })
@@ -119,12 +144,18 @@ class ManagerPage extends Component {
                     items={[this.state.subjectOptions, this.state.classesOptions]}
 
                 />
-                {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
                     {...this.state.teachersComponents}
                 </Space>}
-                {<Space direction='vertical' style={{justifyContent: 'center'}}>
+                {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
                     {...this.state.classesComponents}
                 </Space>}
+                <AddNewTeacher
+                    showModal={this.state.showAddTeacherModal}
+                    toggleModal={this.toggleModal}
+                    subject={this.state.openSubject}
+                    handler={this.handler}
+                />
             </div>
         )
     }
