@@ -37,16 +37,10 @@ class ManagerPage extends Component {
         ).then(response => {
             const teachers = response.data.map(teacher => {
                 return <TeacherComponent
-                    teacherId={teacher.id}
-                    name={teacher.name}
-                    surname={teacher.surname}
-                    middleName={teacher.middle_name}
-                    age={teacher.age}
-                    teacherClass={teacher.teacher_class}
+                    teacher={teacher}
                     subject={subject.key}
-                    email={teacher.email}
                     handler={this.handler}
-                    toogleModal={this.toggleModal}
+                    toggleModal={this.toggleModal}
                 />
             })
             const button = <Space
@@ -100,7 +94,7 @@ class ManagerPage extends Component {
             const response_subjects = response.data.map((item) => {
                 return getItem(
                     item.subject_name,
-                    item.subject_id
+                    item.id
                 );
             })
 

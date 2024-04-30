@@ -43,15 +43,10 @@ class AddNewTeacherModal extends Component {
                         (response) => {
                             const teachers = response.data.map(teacher => {
                                 return <TeacherComponent
-                                    teacherId={teacher.id}
-                                    name={teacher.name}
-                                    surname={teacher.surname}
-                                    middleName={teacher.middle_name}
-                                    age={teacher.age}
-                                    teacherClass={teacher.teacher_class}
+                                    teacher={teacher}
                                     subject={this.props.subject}
-                                    email={teacher.email}
                                     handler={this.handler}
+                                    toggleModal={this.toggleModal}
                                 />
                             })
                             const button = <Space
@@ -156,8 +151,9 @@ class AddNewTeacherModal extends Component {
                             name="age"
                             rules={[
                                 {
+                                    type: 'number',
                                     required: true,
-                                    message: 'Пожалуйста, введите возраст учителя!',
+                                    message: 'Пожалуйста, введите корректный возраст учителя!',
                                 },
                             ]}
                         >
@@ -222,29 +218,27 @@ export class TeacherComponent extends Component {
             modalSuccessDelete: false,
             addNewTeacher: false,
         }
+        this.teacher = this.props.teacher
         this.handler = this.props.handler.bind(this)
-        this.toggleModal = this.props.toogleModal.bind(this)
+        this.toggleModal = this.props.toggleModal.bind(this)
+        this.SuccessDeleteModal = this.SuccessDeleteModal.bind(this)
     }
 
-    SuccessDeleteModal = () => {
+    SuccessDeleteModal() {
         const [loading, setLoading] = useState(false);
 
         const handleOkButton = () => {
             setLoading(true);
-            axios.delete(`http://localhost:5000/teachers/${this.props.teacherId}`).then((response) => {
+            axios.delete(`http://localhost:5000/teachers/${this.teacher.id}`).then((response) => {
                 if (response.status === 200) {
                     axios.get(`http://localhost:5000/subjects/${this.props.subject}/teachers`).then(
                         (response) => {
                         const teachers = response.data.map(teacher => {
                             return <TeacherComponent
-                                name={teacher.name}
-                                surname={teacher.surname}
-                                middleName={teacher.middle_name}
-                                teacherId={teacher.id}
-                                teacherClass={teacher.teacher_class}
+                                teacher={teacher}
                                 subject={this.props.subject}
-                                email={teacher.email}
                                 handler={this.handler}
+                                toggleModal={this.toggleModal}
                             />
                         })
                             const button = <Space
@@ -297,7 +291,7 @@ export class TeacherComponent extends Component {
         return (
             <>
                 <Card
-                    title={`${this.props.name} ${this.props.surname} ${this.props.middleName}`}
+                    title={`${this.teacher.name} ${this.teacher.surname} ${this.teacher.middle_name}`}
                     bordered={false}
                     style={{
                         width: "750px",
@@ -323,23 +317,23 @@ export class TeacherComponent extends Component {
                         </div>
                     }
                 >
-                    <p><b>Идентификатор:</b>{` ${this.props.teacherId}`}</p>
-                    <p><b>Возраст:</b>{` ${this.props.age}`}</p>
+                    <p><b>Идентификатор:</b>{` ${this.teacher.id}`}</p>
+                    <p><b>Возраст:</b>{` ${this.teacher.age}`}</p>
                     <p><b>Классный руководитель:</b>
                         {
-                            (Object.keys(this.props.teacherClass).length == 0)
+                            (this.teacher.teacher_class == null)
                                 ? ' Не является классным руководителем' :
-                                ` ${this.props.teacherClass.class_number} ${this.props.teacherClass.class_word}`
+                                ` ${this.teacher.teacher_class.class_number} ${this.teacher.teacher_class.class_word}`
                         }
                     </p>
                     <p><b>Электронная почта:</b>{
-                        (this.props.email == null)
+                        (this.teacher.email == null)
                             ? ' Не зарегистирован' :
-                            ` ${this.props.teacherClass.email}`
+                            ` ${this.teacher.teacher_class.email}`
                     }
                     </p>
                 </Card>
-                <this.SuccessDeleteModal isOpen={this.modalSuccessDelete}/>
+                <this.SuccessDeleteModal isOpen={this.state.modalSuccessDelete}/>
             </>
         )
     }
