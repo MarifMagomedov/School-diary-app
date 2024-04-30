@@ -1,10 +1,10 @@
-import {Component, useEffect, useState} from "react";
+import {Component} from "react";
 import axios from "axios";
 import {Button, Menu, Space} from "antd";
 import {TeacherComponent} from "../../components/managerComponents/TeacherComponents.jsx";
 import {AddNewTeacher} from "../../components/managerComponents/TeacherComponents.jsx";
 import ClassesComponent from "../../components/managerComponents/ClassesComponent.jsx";
-import {useForm} from "antd/es/form/Form.js";
+
 
 function getItem(label, key, icon, children, type) {
     return {
@@ -37,6 +37,7 @@ class ManagerPage extends Component {
         ).then(response => {
             const teachers = response.data.map(teacher => {
                 return <TeacherComponent
+                    key={teacher.id}
                     teacher={teacher}
                     subject={subject.key}
                     handler={this.handler}
@@ -118,6 +119,7 @@ class ManagerPage extends Component {
                     classesOptions: getItem('Классы', 'classes', null, response_classes)
                 }
             )
+            this.render()
         })
     }
 
@@ -136,13 +138,12 @@ class ManagerPage extends Component {
                     }}
                     mode="inline"
                     items={[this.state.subjectOptions, this.state.classesOptions]}
-
                 />
                 {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
-                    {...this.state.teachersComponents}
+                    {this.state.teachersComponents}
                 </Space>}
                 {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
-                    {...this.state.classesComponents}
+                    {this.state.classesComponents}
                 </Space>}
                 <AddNewTeacher
                     showModal={this.state.showAddTeacherModal}
