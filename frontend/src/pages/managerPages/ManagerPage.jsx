@@ -1,9 +1,10 @@
 import {Component} from "react";
 import axios from "axios";
 import {Button, Menu, Space} from "antd";
-import {TeacherComponent} from "../../components/managerComponents/TeacherComponents.jsx";
-import {AddNewTeacher} from "../../components/managerComponents/TeacherComponents.jsx";
-import ClassesComponent from "../../components/managerComponents/ClassesComponent.jsx";
+import {TeacherComponent} from "../../components/usersComponents/TeacherComponents.jsx";
+import {AddNewTeacher} from "../../components/usersComponents/TeacherComponents.jsx";
+import ClassComponent from "../../components/usersComponents/ClassesComponent.jsx";
+
 
 
 function getItem(label, key, icon, children, type) {
@@ -26,7 +27,8 @@ class ManagerPage extends Component {
             teachersComponents: [],
             classesComponents: [],
             showAddTeacherModal: false,
-            openSubject: ''
+            openSubject: '',
+            menuHeight: '100vh'
         }
         this.handler = this.handler.bind(this)
     }
@@ -59,7 +61,8 @@ class ManagerPage extends Component {
             this.setState({
                 teachersComponents: [teachers, button],
                 classesComponents: [],
-                openSubject: subject.key
+                openSubject: subject.key,
+                menuHeight: window.height
             });
         })
     };
@@ -67,15 +70,22 @@ class ManagerPage extends Component {
     onClickClass = (clickCls) => {
         axios.get(`http://localhost:5000/classes/class/${clickCls.key}`).then(response => {
             const clsInfo = response.data
-            const cls = <ClassesComponent
-                name={`${clsInfo.class_number} ${clsInfo.class_word}`}
+            const cls = <ClassComponent
+                key={clsInfo.id}
+                students={clsInfo.students}
                 teacher={clsInfo.classroom_teacher}
                 classId={clsInfo.id}
             />
-            const button = <Button type="primary" >Добавить ученика</Button>
+            const button = <Space
+                direction="horizontal"
+                style={{ width: '100%', justifyContent: 'center'}}
+            >
+                <Button type="primary" >Добавить ученика</Button>
+            </Space>
             this.setState({
                 teachersComponents: [],
-                classesComponents: [cls, button]
+                classesComponents: [cls, button],
+                menuHeight: window.height
             });
         })
     }
@@ -129,8 +139,8 @@ class ManagerPage extends Component {
                 <Menu
                     style={{
                         width: 256,
-                        height: '100vh',
-                        overflow: 'auto'
+                        height: this.state.menuHeight,
+                        overflow: 'auto',
                     }}
                     selectable
                     onClick={(item) => {

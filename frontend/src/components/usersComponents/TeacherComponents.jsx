@@ -1,4 +1,4 @@
-import {Card, Button, Modal, Typography, Form, Select, Input, Space} from "antd";
+import {Card, Button, Modal, Typography, Form, Select, Input, Space, InputNumber} from "antd";
 import {Component, useState} from "react";
 import axios from "axios";
 
@@ -37,6 +37,7 @@ class AddNewTeacherModal extends Component {
             const values = await this.props.form[0].validateFields()
             values.age = Number(values.age)
             values.subjects = Number(this.props.subject)
+            console.log(values)
             axios.post('http://localhost:5000/teachers/add', values).then((response) => {
                 if (response.status === 201) {
                     axios.get(`http://localhost:5000/subjects/${this.props.subject}/teachers`).then(
@@ -151,13 +152,12 @@ class AddNewTeacherModal extends Component {
                             name="age"
                             rules={[
                                 {
-                                    type: 'number',
                                     required: true,
                                     message: 'Пожалуйста, введите корректный возраст учителя!',
                                 },
                             ]}
                         >
-                            <Input />
+                            <InputNumber min={20} max={80} style={{width:'100%'}}/>
                         </Form.Item>
                         <Form.Item
                             label="Класс р-ль"
@@ -235,6 +235,7 @@ export class TeacherComponent extends Component {
                         (response) => {
                         const teachers = response.data.map(teacher => {
                             return <TeacherComponent
+                                key={teacher.id}
                                 teacher={teacher}
                                 subject={this.props.subject}
                                 handler={this.handler}
@@ -326,12 +327,26 @@ export class TeacherComponent extends Component {
                                 ` ${this.teacher.teacher_class.class_number} ${this.teacher.teacher_class.class_word}`
                         }
                     </p>
-                    <p><b>Электронная почта:</b>{
+                    {(this.teacher.register != null) ?
+                        <div><p><b>Электронная почта:</b>{
                         (this.teacher.email == null)
                             ? ' Не зарегистирован' :
-                            ` ${this.teacher.teacher_class.email}`
+                            ` ${this.teacher.email}`
                     }
                     </p>
+                    <p><b>Вконтакте:</b>{
+                        (this.teacher.vk == null)
+                            ? ' Не указан' :
+                            ` ${this.teacher.vk}`
+                    }
+                    </p>
+                    <p><b>Телеграмм:</b>{
+                        (this.teacher.telegram == null)
+                            ? ' Не указан' :
+                            ` ${this.teacher.telegram}`
+                    }
+                    </p>
+                    </div>: <p><b>Зарегистрирован:</b> Нет</p>}
                 </Card>
                 <this.SuccessDeleteModal isOpen={this.state.modalSuccessDelete}/>
             </>
