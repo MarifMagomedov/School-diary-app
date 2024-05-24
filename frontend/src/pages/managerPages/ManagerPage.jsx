@@ -102,7 +102,7 @@ class ManagerPage extends Component {
 
     componentDidMount() {
         axios.get('http://localhost:5000/subjects/all').then((response) => {
-            const response_subjects = response.data.map((item) => {
+            const responseSubjects = response.data.map((item) => {
                 return getItem(
                     item.subject_name,
                     item.id
@@ -111,13 +111,13 @@ class ManagerPage extends Component {
 
             this.setState(
                 {
-                    subjectOptions: getItem('Учителя', 'subjects', null, response_subjects)
+                    subjectOptions: getItem('Учителя', 'subjects', null, responseSubjects)
                 }
             )
         })
 
         axios.get('http://localhost:5000/classes/all').then((response) => {
-            const response_classes = response.data.map((item) => {
+            const responseClasses = response.data.map((item) => {
                 return getItem(
                     `${item.class_number} ${item.class_word}`,
                     item.id
@@ -126,7 +126,7 @@ class ManagerPage extends Component {
 
             this.setState(
                 {
-                    classesOptions: getItem('Классы', 'classes', null, response_classes)
+                    classesOptions: getItem('Классы', 'classes', null, responseClasses)
                 }
             )
             this.render()
@@ -139,7 +139,7 @@ class ManagerPage extends Component {
                 <Menu
                     style={{
                         width: 256,
-                        height: this.state.menuHeight,
+                        height: '100vh',
                         overflow: 'auto',
                     }}
                     selectable
