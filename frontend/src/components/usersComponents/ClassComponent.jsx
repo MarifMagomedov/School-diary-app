@@ -1,9 +1,7 @@
-import {Button, Card, Modal, Space, Typography} from "antd";
+import {Modal, Space, Typography} from "antd";
 import axios from "axios";
 import {Component, useState} from "react";
-import {TeacherComponent} from "./TeacherComponents.jsx";
-import ClassroomTeacherComponent from "./ClassroomTeacherComponent.jsx";
-import StudentComponent from "./StudentComponent.jsx";
+import StudentComponent from "../StudentComponents/StudentComponent.jsx";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 
 
@@ -61,7 +59,7 @@ class ClassComponent extends Component {
 
         this.setState(
             {
-                left: this.state.right,
+                left: this.state.right + 1,
                 right: this.state.right + 6,
             }
         )

@@ -1,6 +1,8 @@
 import {Card, Button, Modal, Typography, Form, Select, Input, Space, InputNumber} from "antd";
 import {Component, useState} from "react";
 import axios from "axios";
+import TeacherCard from "./TeacherCard.jsx";
+import DeleteTeacherModal from "./Modal.jsx";
 
 
 class AddNewTeacherModal extends Component {
@@ -37,7 +39,6 @@ class AddNewTeacherModal extends Component {
             const values = await this.props.form[0].validateFields()
             values.age = Number(values.age)
             values.subjects = Number(this.props.subject)
-            console.log(values)
             axios.post('http://localhost:5000/teachers/add', values).then((response) => {
                 if (response.status === 201) {
                     axios.get(`http://localhost:5000/subjects/${this.props.subject}/teachers`).then(
@@ -181,7 +182,7 @@ class AddNewTeacherModal extends Component {
                         >
                             <Input />
                         </Form.Item>
-                         <Form.Item
+                        <Form.Item
                             label="Вконтакте"
                             name="vk"
                             rules={[
@@ -288,68 +289,4 @@ export class TeacherComponent extends Component {
 
     }
 
-    render() {
-        return (
-            <>
-                <Card
-                    title={`${this.teacher.name} ${this.teacher.surname} ${this.teacher.middle_name}`}
-                    bordered={false}
-                    style={{
-                        width: "750px",
-                        marginTop: "15px"
-                    }}
-                    extra={
-                        <div>
-                            <Button
-                                type="primary"
-                                style={{marginRight: "10px"}}
-                                onClick={this.handleClickEdit}
-                            >
-                                Редактировать
-                            </Button>
-                            <Button
-                                type="primary"
-                                danger
-                                ghost
-                                onClick={this.handleClickDelete}
-                            >
-                                Удалить
-                            </Button>
-                        </div>
-                    }
-                >
-                    <p><b>Идентификатор:</b>{` ${this.teacher.id}`}</p>
-                    <p><b>Возраст:</b>{` ${this.teacher.age}`}</p>
-                    <p><b>Классный руководитель:</b>
-                        {
-                            (this.teacher.teacher_class == null)
-                                ? ' Не является классным руководителем' :
-                                ` ${this.teacher.teacher_class.class_number} ${this.teacher.teacher_class.class_word}`
-                        }
-                    </p>
-                    {(this.teacher.register != null) ?
-                        <div><p><b>Электронная почта:</b>{
-                        (this.teacher.email == null)
-                            ? ' Не зарегистирован' :
-                            ` ${this.teacher.email}`
-                    }
-                    </p>
-                    <p><b>Вконтакте:</b>{
-                        (this.teacher.vk == null)
-                            ? ' Не указан' :
-                            ` ${this.teacher.vk}`
-                    }
-                    </p>
-                    <p><b>Телеграмм:</b>{
-                        (this.teacher.telegram == null)
-                            ? ' Не указан' :
-                            ` ${this.teacher.telegram}`
-                    }
-                    </p>
-                    </div>: <p><b>Зарегистрирован:</b> Нет</p>}
-                </Card>
-                <this.SuccessDeleteModal isOpen={this.state.modalSuccessDelete}/>
-            </>
-        )
-    }
 }
