@@ -1,42 +1,52 @@
 import {Button, Form, Input, InputNumber, Modal, Select, Space, Typography} from "antd";
+import {useState} from "react";
+import {addNewTeacher, getTeachersCard} from "../../api/teachers.jsx";
+import * as r from "antd";
+import TeacherComponent from "./TeacherComponent.jsx";
 
 
-const AddNewTeacherButton = () => {
-    return (
-        <Space
-            direction="horizontal"
-            style={{ width: '100%', justifyContent: 'center'}}
-        >
-            <Button
-                type="primary"
-                style={{ marginTop: "15px"}}
-                // onClick={toggleModal}
-            >
-                Добавить учителя
-            </Button>
-        </Space>
-    )
-}
-
-
-function AddTeacherModal(props) {
-    const [form] = Form.useForm()
+function AddTeacherModal({modalIsOpen, handler, classesOptions, subject, teachers, handlerTeachers}) {
+    const form = Form.useForm()
 
     async function handleSubmit() {
+        try {
+            const values = await form[0].validateFields()
+            values.age = Number(values.age)
+            values.subjects = Number(subject)
 
+            const response = await addNewTeacher(values).then(r => r)
+            if (response.status === 200) {
+                const newTeachers = await getTeachersCard(subject, handlerTeachers, teachers, classesOptions).then(cards => cards)
+                handlerTeachers(
+                    [
+                        newTeachers,
+                        <AddNewTeacher
+                            classesOptions={classesOptions}
+                            subject={subject}
+                            handlerTeachers={handlerTeachers}
+                            teachers={teachers}
+                        />
+                    ]
+                )
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     }
     
     return (
-        <>
+        <div>
             <Modal
-                open={this.props.showModal}
-                onCancel={this.toggleModal}
-                // onOk={handleSubmit}
+                centered
+                open={modalIsOpen}
+                onCancel={handler}
+                onOk={handleSubmit}
                 footer={[
-                    <Button form={this.props.form[0]} key="submit" type="primary" onClick={handleSubmit}>
+                    <Button form={form[0]} key="submit" type="primary" onClick={handleSubmit}>
                         Добавить
                     </Button>,
-                    <Button key="cancel" onClick={this.toggleModal}>
+                    <Button key="cancel" onClick={handler}>
                         Отмена
                     </Button>
                 ]}
@@ -45,7 +55,7 @@ function AddTeacherModal(props) {
                     <Typography.Title level={1} >Добавить учителя</Typography.Title>
                 </Space>
                 <Form
-                    form={this.props.form[0]}
+                    form={form[0]}
                     layout="horizontal"
                     name="normal_login"
                     className="login-form"
@@ -120,7 +130,12 @@ function AddTeacherModal(props) {
                             },
                         ]}
                     >
-                        <Select placeholder='Выберите класс' options={this.state.classesOptions}/>
+                        <Select placeholder='Выберите класс' options={classesOptions.map(cls => {
+                            return {
+                                value: cls.key,
+                                label: cls.label,
+                            }
+                        })}/>
                     </Form.Item>
                     <Form.Item
                         label="Телеграмм"
@@ -146,8 +161,42 @@ function AddTeacherModal(props) {
                     </Form.Item>
                 </Form>
             </Modal>
-        </>
+        </div>
     )
 }
 
-export default AddTeacherModal;
+function AddNewTeacher({subject, classesOptions, handlerTeachers, teachers}) {
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+
+    const handleCancel = () => {
+        setModalIsOpen(false)
+    }
+
+    return (
+        <Space
+            direction="horizontal"
+            style={{ width: '100%', justifyContent: 'center'}}
+        >
+            <Button
+                type="primary"
+                style={{ marginTop: "15px"}}
+                onClick={() => {
+                    setModalIsOpen(true)
+                }}
+            >
+                Добавить учителя
+            </Button>
+            <AddTeacherModal
+                modalIsOpen={modalIsOpen}
+                handler={handleCancel}
+                subject={subject}
+                classesOptions={classesOptions}
+                handlerTeachers={handlerTeachers}
+                teachers={teachers}
+            />
+        </Space>
+    )
+}
+
+
+export default AddNewTeacher;

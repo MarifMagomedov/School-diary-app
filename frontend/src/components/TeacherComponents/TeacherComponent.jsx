@@ -1,37 +1,43 @@
 import {Button, Card, Modal} from "antd";
 import {useState} from "react";
-import {deleteTeacher} from "../../api/teachers.jsx";
+import {deleteTeacher, getTeachersCard} from "../../api/teachers.jsx";
+import AddNewTeacher from "./AddTeacherModal.jsx";
+import {getClassesOptions} from "../../api/classes.jsx";
 
 
-function DeleteTeacherModal(props) {
+function DeleteTeacherModal({isOpen, handler, handlerTeachers, teacherId, teachers, subject, classesOptions}) {
     async function handleOkButton(){
-        await deleteTeacher(props.teacherId).then(status => status)
-        const removedTeachers = props.teachers.filter(
-            teacher => teacher.id !== props.teacherId
-        );
-        props.handlerTeachers(removedTeachers);
-        props.handler();
-    }
-
-    const handleCancelButton = () => {
-        props.handler()
+        await deleteTeacher(teacherId).then(status => status)
+        const newTeachers = await getTeachersCard(subject, handlerTeachers, teachers, classesOptions).then(cards => cards)
+        handlerTeachers(
+            [
+                newTeachers,
+                <AddNewTeacher
+                    subject={subject}
+                    classesOptions={classesOptions}
+                    handlerTeachers={handlerTeachers}
+                    teachers={newTeachers}
+                />
+            ]
+        )
+        handler(false);
     }
 
     return (
         <Modal
             centered
-            open={props.isOpen}
+            open={isOpen}
             title="Вы точно хотите удалить данного учителя из базы?"
             okText='Удалить'
             cancelText='Отмена'
             onOk={handleOkButton}
-            onCancel={handleCancelButton}
+            onCancel={() => handler(false)}
         />
     )
 }
 
 
-function TeacherComponent(props) {
+function TeacherComponent({teacher, handlerTeachers, teachers, subject, classesOptions}) {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
     const handleClickEdit = () => {
@@ -42,14 +48,10 @@ function TeacherComponent(props) {
         return setIsOpenDeleteModal(true)
     }
 
-    const handler = () => {
-        setIsOpenDeleteModal(!isOpenDeleteModal);
-    }
-
     return (
         <>
             <Card
-                title={`${props.teacher.name} ${props.teacher.surname} ${props.teacher.middle_name}`}
+                title={`${teacher.name} ${teacher.surname} ${teacher.middle_name}`}
                 bordered={false}
                 style={{
                     width: "750px",
@@ -75,42 +77,44 @@ function TeacherComponent(props) {
                     </div>
                 }
             >
-                <p><b>Идентификатор:</b>{` ${props.teacher.id}`}</p>
-                <p><b>Возраст:</b>{` ${props.teacher.age}`}</p>
+                <p><b>Идентификатор:</b>{` ${teacher.id}`}</p>
+                <p><b>Возраст:</b>{` ${teacher.age}`}</p>
                 <p><b>Классный руководитель:</b>
                     {
-                        (props.teacher.teacher_class == null)
+                        (teacher.teacher_class == null)
                             ? ' Не является классным руководителем' :
-                            ` ${props.teacher.teacher_class.class_number} ${props.teacher.teacher_class.class_word}`
+                            ` ${teacher.teacher_class.class_number} ${teacher.teacher_class.class_word}`
                     }
                 </p>
-                {(props.teacher.register != null) ?
+                {(teacher.register != null) ?
                     <div><p><b>Электронная почта:</b>{
-                    (props.teacher.email == null)
+                    (teacher.email == null)
                         ? ' Не зарегистирован' :
-                        ` ${props.teacher.email}`
+                        ` ${teacher.email}`
                 }
                 </p>
                 <p><b>Вконтакте:</b>{
-                    (props.teacher.vk == null)
+                    (teacher.vk == null)
                         ? ' Не указан' :
-                        ` ${props.teacher.vk}`
+                        ` ${teacher.vk}`
                 }
                 </p>
                 <p><b>Телеграмм:</b>{
-                    (props.teacher.telegram == null)
+                    (teacher.telegram == null)
                         ? ' Не указан' :
-                        ` ${props.teacher.telegram}`
+                        ` ${teacher.telegram}`
                 }
                 </p>
                 </div>: <p><b>Зарегистрирован:</b> Нет</p>}
             </Card>
             {<DeleteTeacherModal
-                teacherId={props.teacher.id}
+                teacherId={teacher.id}
                 isOpen={isOpenDeleteModal}
-                handler={handler}
-                teachers={props.teachers}
-                handlerTeachers={props.handlerTeachers}
+                handler={setIsOpenDeleteModal}
+                teachers={teachers}
+                handlerTeachers={handlerTeachers}
+                subject={subject}
+                classesOptions={classesOptions}
             />}
         </>
     )

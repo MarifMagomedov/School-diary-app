@@ -4,15 +4,14 @@ import ClassComponent from "../../components/usersComponents/ClassComponent.jsx"
 import {getClassesOptions, getClassInfo} from "../../api/classes.jsx";
 import {getSubjectsOptions} from "../../api/subjects.jsx";
 import {getTeachersCard} from "../../api/teachers.jsx";
-import {AddNewTeacherButton} from "../../components/TeacherComponents/Buttons.jsx";
 import {AddNewStudentButton} from "../../components/StudentComponents/Buttons.jsx";
 import ManagerMenu from "../../components/Menu/ManagerMenu.jsx";
-import AddTeacherModal from "../../components/TeacherComponents/AddTeacherModal.jsx";
+import AddNewTeacher from "../../components/TeacherComponents/AddTeacherModal.jsx";
 
 
 function ManagerPage() {
-    const [subjectsOptions, setSubjectsOptions] = useState([])
-    const [classesOptions, setClassesOptions] = useState([])
+    const [subjectsOptions, setSubjectsOptions] = useState({})
+    const [classesOptions, setClassesOptions] = useState({})
     const [teachersComponents, setTeachersComponents] = useState([])
     const [classComponent, setClassComponent] = useState([])
 
@@ -23,9 +22,17 @@ function ManagerPage() {
 
     async function onClickSubject(subject){
         setTeachersComponents(
-            await getTeachersCard(
-                subject.key, setTeachersComponents, teachersComponents
-            ).then(teachers => teachers),
+            [
+                await getTeachersCard(
+                    subject.key, setTeachersComponents, teachersComponents, classesOptions.children
+                ).then(teachers => teachers),
+                <AddNewTeacher
+                    classesOptions={classesOptions.children}
+                    subject={subject.key}
+                    handlerTeachers={setTeachersComponents}
+                    teachers={teachersComponents}
+                />
+            ]
         )
     }
 
@@ -52,7 +59,6 @@ function ManagerPage() {
                 {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
                     {classComponent}
                 </Space>}
-                {<AddTeacherModal />}
             </div>
         </>
     )
