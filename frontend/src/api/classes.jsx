@@ -1,5 +1,5 @@
 import axios from "axios";
-import TeacherCard from "../components/TeacherComponents/TeacherCard.jsx";
+import TeacherComponent from "../components/TeacherComponents/TeacherComponent.jsx";
 import StudentCard from "../components/StudentComponents/StudentCard.jsx";
 
 
@@ -36,11 +36,11 @@ export async function getClassInfo(classId) {
                 student
             })
             const classroomTeacher = (
-                <TeacherCard
+                <TeacherComponent
                     key={clsInfo.teacher.id}
                     teacher={clsInfo.teacher}
                     subject={clsInfo.subjectId}
-                ></TeacherCard>
+                ></TeacherComponent>
             )
             return {
                 teacher: classroomTeacher,

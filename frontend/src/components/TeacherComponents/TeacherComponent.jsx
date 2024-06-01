@@ -1,18 +1,25 @@
 import {Button, Card, Modal} from "antd";
 import {useState} from "react";
+import {deleteTeacher} from "../../api/teachers.jsx";
 
 
 function DeleteTeacherModal(props) {
-    const handleOkButton = () => {
-        props.handler(false);
+    async function handleOkButton(){
+        await deleteTeacher(props.teacherId).then(status => status)
+        const removedTeachers = props.teachers.filter(
+            teacher => teacher.id !== props.teacherId
+        );
+        props.handlerTeachers(removedTeachers);
+        props.handler();
     }
 
     const handleCancelButton = () => {
-        props.handler(true)
+        props.handler()
     }
 
     return (
         <Modal
+            centered
             open={props.isOpen}
             title="Вы точно хотите удалить данного учителя из базы?"
             okText='Удалить'
@@ -24,7 +31,7 @@ function DeleteTeacherModal(props) {
 }
 
 
-function TeacherCard(props) {
+function TeacherComponent(props) {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
     const handleClickEdit = () => {
@@ -98,9 +105,15 @@ function TeacherCard(props) {
                 </p>
                 </div>: <p><b>Зарегистрирован:</b> Нет</p>}
             </Card>
-            {<DeleteTeacherModal teacherId={props.teacher.id} isOpen={isOpenDeleteModal} handler={handler}/>}
+            {<DeleteTeacherModal
+                teacherId={props.teacher.id}
+                isOpen={isOpenDeleteModal}
+                handler={handler}
+                teachers={props.teachers}
+                handlerTeachers={props.handlerTeachers}
+            />}
         </>
     )
 }
 
-export default TeacherCard;
+export default TeacherComponent;

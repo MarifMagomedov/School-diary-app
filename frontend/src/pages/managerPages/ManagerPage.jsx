@@ -7,6 +7,7 @@ import {getTeachersCard} from "../../api/teachers.jsx";
 import {AddNewTeacherButton} from "../../components/TeacherComponents/Buttons.jsx";
 import {AddNewStudentButton} from "../../components/StudentComponents/Buttons.jsx";
 import ManagerMenu from "../../components/Menu/ManagerMenu.jsx";
+import AddTeacherModal from "../../components/TeacherComponents/AddTeacherModal.jsx";
 
 
 function ManagerPage() {
@@ -20,19 +21,18 @@ function ManagerPage() {
         getClassesOptions().then(classes => setClassesOptions(classes))
     }, []);
 
-    async function onClickSubject(subject) {
-        const addNewTeacherButton = <AddNewTeacherButton/>
+    async function onClickSubject(subject){
         setTeachersComponents(
-            [
-                await getTeachersCard(subject.key).then(teachers => teachers),
-                addNewTeacherButton
-            ]
+            await getTeachersCard(
+                subject.key, setTeachersComponents, teachersComponents
+            ).then(teachers => teachers),
         )
-        console.log(teachersComponents)
     }
 
-    const onClickClass = (cls) => {
-        const clsInfo = getClassInfo(cls.key).then(clsInfo => clsInfo)
+    async function onClickClass(cls){
+        const clsInfo = (
+            await getClassInfo(cls.key).then(clsInfo => clsInfo)
+        )
         const classComponent = <ClassComponent teacher={clsInfo.teacher} subject={clsInfo.students}/>
         const addNewStudentButton = <AddNewStudentButton/>
         setClassComponent([classComponent, addNewStudentButton])
@@ -52,6 +52,7 @@ function ManagerPage() {
                 {<Space direction='vertical' style={{justifyContent: 'center', marginLeft: "150px", width:"750px"}}>
                     {classComponent}
                 </Space>}
+                {<AddTeacherModal />}
             </div>
         </>
     )
