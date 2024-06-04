@@ -1,12 +1,12 @@
 import axios from "axios";
-import TeacherComponent from "../components/TeacherComponents/TeacherComponent.jsx";
+import Teacher from "../components/TeacherComponents/Teacher.jsx";
 
 export async function getTeachersCard(subjectId, handlerTeachers, teachers, classesOptions) {
      return await axios.get(
-         `http://localhost:5000/subjects/${subjectId}/teachers`
+         `http://localhost:5000/teachers/${subjectId}`
      ).then((response) => {
           return response.data.map(teacher => {
-               return <TeacherComponent
+               return <Teacher
                    key={teacher.id}
                    teacher={teacher}
                    subject={subjectId}

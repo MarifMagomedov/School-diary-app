@@ -1,6 +1,8 @@
 import {Button, Space} from "antd";
 
-export const AddNewStudentButton = () => {
+
+function AddStudentModal() {
+
     return (
         <Space
             direction="horizontal"

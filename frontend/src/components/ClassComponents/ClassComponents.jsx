@@ -1,11 +1,11 @@
 import {Modal, Space, Typography} from "antd";
 import axios from "axios";
 import {Component, useState} from "react";
-import StudentComponent from "../StudentComponents/StudentComponent.jsx";
+import Student from "../StudentComponents/Student.jsx";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 
 
-class ClassComponent extends Component {
+class ClassComponentss extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +23,7 @@ class ClassComponent extends Component {
     componentDidMount() {
         const studentsComponents = []
         for (let student of this.props.students) {
-            let studentComponent = <StudentComponent key={student.id} student={student}/>
+            let studentComponent = <Student key={student.id} student={student}/>
             studentsComponents.push(studentComponent)
         }
         this.setState({studentsComponents: studentsComponents})
@@ -112,4 +112,4 @@ class ClassComponent extends Component {
     }
 }
 
-export default ClassComponent;
+export default ClassComponentss;

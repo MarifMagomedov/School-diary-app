@@ -2,7 +2,7 @@ import {Button, Form, Input, InputNumber, Modal, Select, Space, Typography} from
 import {useState} from "react";
 import {addNewTeacher, getTeachersCard} from "../../api/teachers.jsx";
 import * as r from "antd";
-import TeacherComponent from "./TeacherComponent.jsx";
+import Teacher from "./Teacher.jsx";
 
 
 function AddTeacherModal({modalIsOpen, handler, classesOptions, subject, teachers, handlerTeachers}) {

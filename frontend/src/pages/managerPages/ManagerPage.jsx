@@ -1,19 +1,18 @@
 import {useEffect, useState} from "react";
 import {Space} from "antd";
-import ClassComponent from "../../components/usersComponents/ClassComponent.jsx";
 import {getClassesOptions, getClassInfo} from "../../api/classes.jsx";
 import {getSubjectsOptions} from "../../api/subjects.jsx";
 import {getTeachersCard} from "../../api/teachers.jsx";
-import {AddNewStudentButton} from "../../components/StudentComponents/Buttons.jsx";
 import ManagerMenu from "../../components/Menu/ManagerMenu.jsx";
-import AddNewTeacher from "../../components/TeacherComponents/AddTeacherModal.jsx";
+import AddNewTeacher from "../../components/TeacherComponents/AddTeacher.jsx";
+import Class from "../../components/ClassComponents/Class.jsx";
 
 
 function ManagerPage() {
     const [subjectsOptions, setSubjectsOptions] = useState({})
     const [classesOptions, setClassesOptions] = useState({})
     const [teachersComponents, setTeachersComponents] = useState([])
-    const [classComponent, setClassComponent] = useState([])
+    const [classComponent, setClassComponent] = useState(null)
 
     useEffect(() => {
         getSubjectsOptions().then(subjects => setSubjectsOptions(subjects))
@@ -34,15 +33,21 @@ function ManagerPage() {
                 />
             ]
         )
+        setClassComponent(null)
     }
 
     async function onClickClass(cls){
-        const clsInfo = (
-            await getClassInfo(cls.key).then(clsInfo => clsInfo)
+        const classComponent = (
+            <Class
+                key={cls.key}
+                cls={cls.key}
+                teachersComponents={teachersComponents}
+                setTeachersComponents={setTeachersComponents}
+                classesOptions={classesOptions}
+            />
         )
-        const classComponent = <ClassComponent teacher={clsInfo.teacher} subject={clsInfo.students}/>
-        const addNewStudentButton = <AddNewStudentButton/>
-        setClassComponent([classComponent, addNewStudentButton])
+        setClassComponent(classComponent)
+        setTeachersComponents([])
     }
 
     return (

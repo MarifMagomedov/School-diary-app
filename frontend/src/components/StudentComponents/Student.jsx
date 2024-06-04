@@ -1,19 +1,23 @@
-import {Component} from "react";
 import {Button, Card} from "antd";
+import {useState} from "react";
+import DeleteStudentModal from "./DeleteStudentModal.jsx";
 
 
-const StudentComponent = (props) => {
+function Student({student, handlerStudents, classId}){
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+
     const handleClickEdit = () => {
-
+        return 1
     }
 
     const handleClickDelete = () => {
-
+        setIsOpenDeleteModal(true)
     }
 
     return(
-        <Card
-            title={`${props.student.name} ${props.student.surname} ${props.student.middle_name}`}
+        <div>
+            <Card
+            title={`${student.name} ${student.surname} ${student.middle_name}`}
             bordered={false}
             style={{
                 width: "750px",
@@ -39,31 +43,39 @@ const StudentComponent = (props) => {
                 </div>
             }
         >
-            <p><b>Идентификатор:</b>{` ${props.student.id}`}</p>
-            <p><b>Возраст:</b>{` ${props.student.age}`}</p>
+            <p><b>Идентификатор:</b>{` ${student.id}`}</p>
+            <p><b>Возраст:</b>{` ${student.age}`}</p>
 
-            {(props.student.register != null) ?
+            {(student.register != null) ?
                     <div><p><b>Электронная почта:</b>{
-                    (props.student.email == null)
+                    (student.email == null)
                         ? ' Не зарегистирован' :
-                        ` ${props.student.email}`
+                        ` ${student.email}`
                 }
                 </p>
                 <p><b>Вконтакте:</b>{
-                    (props.student.vk == null)
+                    (student.vk == null)
                         ? ' Не указан' :
-                        ` ${this.teacher.vk}`
+                        ` ${student.vk}`
                 }
                 </p>
                 <p><b>Телеграмм:</b>{
-                    (props.student.telegram == null)
+                    (student.telegram == null)
                         ? ' Не указан' :
-                        ` ${props.student.telegram}`
+                        ` ${student.telegram}`
                 }
                 </p>
                 </div>: <p><b>Зарегистрирован:</b> Нет</p>}
-        </Card>
+            </Card>
+            <DeleteStudentModal
+                isOpen={isOpenDeleteModal}
+                handler={setIsOpenDeleteModal}
+                handlerStudents={handlerStudents}
+                studentId={student.id}
+                classId={classId}
+            />
+        </div>
     )
 }
 
-export default StudentComponent
+export default Student
