@@ -1,5 +1,4 @@
 import axios from "axios";
-import Teacher from "../components/TeacherComponents/Teacher.jsx";
 import Student from "../components/StudentComponents/Student.jsx";
 
 

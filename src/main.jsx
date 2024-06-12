@@ -8,11 +8,11 @@ import ManagerPage from "./pages/managerPages/ManagerPage.jsx";
 const router = createBrowserRouter(
     [
         {
-            path: '/',
+            path: '/School-diary-app-frontend/',
             element: <RegisterPage/>
         },
         {
-            path: '/manager',
+            path: '/School-diary-app-frontend/manager',
             element: <ManagerPage/>
         }
     ]
