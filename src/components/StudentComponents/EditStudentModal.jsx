@@ -2,9 +2,10 @@ import {Button, Form, Input, InputNumber, Modal, Select, Space, Typography} from
 import {getSubjectsOptions} from "../../api/subjects.jsx";
 import {useEffect, useState} from "react";
 import {getClassesOptions} from "../../api/classes.jsx";
+import {getStudentsCard, updateStudent} from "../../api/students.jsx";
 
 
-function EditStudentModal({studentId, handler, modalIsOpen}) {
+function EditStudentModal({studentId, handler, modalIsOpen, classId, handlerStudents}) {
     const form = Form.useForm()
     const [subjectOptions, setSubjectOptions] = useState([])
     const [classesOptions, setClassesOptions] = useState([])
@@ -17,7 +18,12 @@ function EditStudentModal({studentId, handler, modalIsOpen}) {
     async function handleSubmit() {
         try {
             const values = await form[0].validateFields()
-            handler(false)
+            const response = await updateStudent(values, studentId).then(r => r)
+            if (response.status === 200) {
+                const newStudents = await getStudentsCard(classId, handlerStudents).then(cards => cards)
+                handlerStudents(newStudents)
+                handler(false)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -39,7 +45,7 @@ function EditStudentModal({studentId, handler, modalIsOpen}) {
             ]}
         >
             <Space direction="vertical" style={{width: '100%', justifyContent: 'center'}}>
-                 <Typography.Title level={1}>Отредактировать учителя</Typography.Title>
+                 <Typography.Title level={1}>Отредактировать ученика</Typography.Title>
             </Space>
             <Form
                 form={form[0]}

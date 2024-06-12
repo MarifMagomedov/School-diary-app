@@ -76,7 +76,13 @@ function Student({student, handlerStudents, classId}){
                 studentId={student.id}
                 classId={classId}
             />
-            <EditStudentModal studentId={student.id} handler={setIsOpenEditModal} modalIsOpen={isOpenEditModal} />
+            <EditStudentModal
+                studentId={student.id}
+                handler={setIsOpenEditModal}
+                modalIsOpen={isOpenEditModal}
+                handlerStudents={handlerStudents}
+                classId={classId}
+            />
         </div>
     )
 }
