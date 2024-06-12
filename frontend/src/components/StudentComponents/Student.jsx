@@ -1,17 +1,19 @@
 import {Button, Card} from "antd";
 import {useState} from "react";
 import DeleteStudentModal from "./DeleteStudentModal.jsx";
+import EditStudentModal from "./EditStudentModal.jsx";
 
 
 function Student({student, handlerStudents, classId}){
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
-
-    const handleClickEdit = () => {
-        return 1
-    }
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
     const handleClickDelete = () => {
         setIsOpenDeleteModal(true)
+    }
+
+    const handleClickEdit = () => {
+        setIsOpenEditModal(true)
     }
 
     return(
@@ -74,6 +76,7 @@ function Student({student, handlerStudents, classId}){
                 studentId={student.id}
                 classId={classId}
             />
+            <EditStudentModal studentId={student.id} handler={setIsOpenEditModal} modalIsOpen={isOpenEditModal} />
         </div>
     )
 }

@@ -26,3 +26,9 @@ export async function getStudentsCard(classId, handlerStudents) {
         })
     })
 }
+
+export async function addStudent(values) {
+    return await axios.post(`http://localhost:5000/students/add`, values).then(
+        response => response
+    )
+}

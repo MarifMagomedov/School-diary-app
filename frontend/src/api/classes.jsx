@@ -2,6 +2,8 @@ import axios from "axios";
 import Teacher from "../components/TeacherComponents/Teacher.jsx";
 import Student from "../components/StudentComponents/Student.jsx";
 import {Typography} from "antd";
+import SetTeacher from "../components/TeacherComponents/SetClassTeacher.jsx";
+import ClassroomTeacher from "../components/TeacherComponents/ClassroomTeacher.jsx";
 
 
 function getItem(label, key, icon, children, type) {
@@ -16,7 +18,7 @@ function getItem(label, key, icon, children, type) {
 
 
 export async function getClassesOptions() {
-    return await axios.get('http://localhost:5000/classes/all').then((response) => {
+    return await axios.get('http://localhost:5000/class/all').then((response) => {
         const responseClasses = response.data.map((item) => {
             return getItem(
                 `${item.class_number} ${item.class_word}`,
@@ -28,8 +30,8 @@ export async function getClassesOptions() {
 }
 
 
-export async function getClassInfo(classId, teachers, handlerTeachers, classesOptions, handlerStudents) {
-    return await axios.get(`http://localhost:5000/classes/class/${classId}`)
+export async function getClassInfo(classId, handlerTeachers, classesOptions, handlerStudents) {
+    return await axios.get(`http://localhost:5000/class/${classId}`)
         .then((response) => {
             let classroomTeacher
             const clsInfo = response.data;
@@ -44,15 +46,11 @@ export async function getClassInfo(classId, teachers, handlerTeachers, classesOp
                 )
             })
 
-            if (clsInfo.teacher !== undefined) {
+            if (clsInfo.classroom_teacher !== null) {
+                console.log(clsInfo.classroom_teacher)
                 classroomTeacher = (
-                    <Teacher
-                        key={clsInfo.teacher.id}
-                        teacher={clsInfo.teacher}
-                        subject={clsInfo.subject_id}
-                        handlerTeachers={handlerTeachers}
-                        classesOptions={classesOptions}
-                        teachers={teachers}
+                    <ClassroomTeacher
+                        teacher={clsInfo.classroom_teacher}
                     />
                 )
             } else {
@@ -73,3 +71,10 @@ export async function getClassInfo(classId, teachers, handlerTeachers, classesOp
         })
 }
 
+export async function setClassTeacher(teacherId, classId){
+    return await axios.patch(`http://localhost:5000/class/${classId}/teacher/${teacherId}`).then(
+        (response) => {
+            return response
+        }
+    )
+}

@@ -1,19 +1,19 @@
 import {useEffect, useState} from "react";
 import {getClassInfo} from "../../api/classes.jsx";
 import {Space, Typography} from "antd";
-import ClassComponents from "./ClassComponents.jsx";
+import AddStudent from "../StudentComponents/AddStudent.jsx";
+import SetTeacher from "../TeacherComponents/SetClassTeacher.jsx";
 
 
 
 
-function Class({cls, teachersComponents, setTeachersComponents, classesOptions}) {
+function Class({cls, setTeachersComponents, classesOptions, subjectOptions}) {
     const [teacherComponent, setTeacherComponent] = useState(null);
     const [studentsComponents, setStudentsComponent] = useState([]);
 
     useEffect(() => {
         getClassInfo(
             cls,
-            teachersComponents,
             setTeachersComponents,
             classesOptions,
             setStudentsComponent
@@ -27,8 +27,10 @@ function Class({cls, teachersComponents, setTeachersComponents, classesOptions})
         <Space direction="vertical">
             <Typography.Title style={{marginBottom: '0px'}}>Классный руководитель</Typography.Title>
             {teacherComponent}
+            <SetTeacher classId={cls} handlerTeacher={setTeacherComponent}/>
             <Typography.Title style={{marginTop: '35px', marginBottom: '0px'}}>Ученики</Typography.Title>
             {studentsComponents}
+            <AddStudent handlerStudents={setStudentsComponent} classId={cls} subjectOptions={subjectOptions}/>
         </Space>
     )
 }

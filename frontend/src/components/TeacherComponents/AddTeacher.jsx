@@ -5,7 +5,7 @@ import * as r from "antd";
 import Teacher from "./Teacher.jsx";
 
 
-function AddTeacherModal({modalIsOpen, handler, classesOptions, subject, teachers, handlerTeachers}) {
+function AddTeacherModal({modalIsOpen, handler, subject, handlerTeachers}) {
     const form = Form.useForm()
 
     async function handleSubmit() {
@@ -15,21 +15,19 @@ function AddTeacherModal({modalIsOpen, handler, classesOptions, subject, teacher
             values.subjects = Number(subject)
 
             const response = await addNewTeacher(values).then(r => r)
-            if (response.status === 200) {
-                const newTeachers = await getTeachersCard(subject, handlerTeachers, teachers, classesOptions).then(cards => cards)
+            if (response.status === 201) {
+                const newTeachers = await getTeachersCard(subject, handlerTeachers).then(cards => cards)
                 handlerTeachers(
                     [
                         newTeachers,
                         <AddNewTeacher
-                            classesOptions={classesOptions}
                             subject={subject}
                             handlerTeachers={handlerTeachers}
-                            teachers={teachers}
                         />
                     ]
                 )
             }
-
+            handler()
         } catch (error) {
             console.log(error)
         }
@@ -121,51 +119,13 @@ function AddTeacherModal({modalIsOpen, handler, classesOptions, subject, teacher
                     >
                         <InputNumber min={20} max={80} style={{width:'100%'}}/>
                     </Form.Item>
-                    <Form.Item
-                        label="Класс р-ль"
-                        name="teacher_class"
-                        rules={[
-                            {
-                                required: false
-                            },
-                        ]}
-                    >
-                        <Select placeholder='Выберите класс' options={classesOptions.map(cls => {
-                            return {
-                                value: cls.key,
-                                label: cls.label,
-                            }
-                        })}/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Телеграмм"
-                        name="telegram"
-                        rules={[
-                            {
-                                required: false
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Вконтакте"
-                        name="vk"
-                        rules={[
-                            {
-                                required: false
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
                 </Form>
             </Modal>
         </div>
     )
 }
 
-function AddNewTeacher({subject, classesOptions, handlerTeachers, teachers}) {
+function AddNewTeacher({subject, handlerTeachers}) {
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const handleCancel = () => {
@@ -190,9 +150,7 @@ function AddNewTeacher({subject, classesOptions, handlerTeachers, teachers}) {
                 modalIsOpen={modalIsOpen}
                 handler={handleCancel}
                 subject={subject}
-                classesOptions={classesOptions}
                 handlerTeachers={handlerTeachers}
-                teachers={teachers}
             />
         </Space>
     )

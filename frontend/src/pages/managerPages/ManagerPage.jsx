@@ -23,10 +23,9 @@ function ManagerPage() {
         setTeachersComponents(
             [
                 await getTeachersCard(
-                    subject.key, setTeachersComponents, teachersComponents, classesOptions.children
+                    subject.key, setTeachersComponents
                 ).then(teachers => teachers),
                 <AddNewTeacher
-                    classesOptions={classesOptions.children}
                     subject={subject.key}
                     handlerTeachers={setTeachersComponents}
                     teachers={teachersComponents}
@@ -44,6 +43,7 @@ function ManagerPage() {
                 teachersComponents={teachersComponents}
                 setTeachersComponents={setTeachersComponents}
                 classesOptions={classesOptions}
+                subjectOptions={subjectsOptions.children}
             />
         )
         setClassComponent(classComponent)

@@ -1,21 +1,9 @@
 import {Button, Card, Modal} from "antd";
 import {useState} from "react";
 import DeleteTeacherModal from "./DeleteTeacherModal.jsx";
-import EditTeacherModal from "./EditTeacherModal.jsx";
 
 
-function Teacher({teacher, handlerTeachers, subject}) {
-    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
-    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-
-    const handleClickDelete = () => {
-        setIsOpenDeleteModal(true)
-    }
-
-    const handleClickEdit = () => {
-        setIsOpenEditModal(true)
-    }
-
+function ClassroomTeacher({teacher}) {
     return (
         <>
             <Card
@@ -25,25 +13,6 @@ function Teacher({teacher, handlerTeachers, subject}) {
                     width: "750px",
                     marginTop: "15px"
                 }}
-                extra={
-                    <div>
-                        <Button
-                            type="primary"
-                            style={{marginRight: "10px"}}
-                            onClick={handleClickEdit}
-                        >
-                            Редактировать
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            ghost
-                            onClick={handleClickDelete}
-                        >
-                            Удалить
-                        </Button>
-                    </div>
-                }
             >
                 <p><b>Идентификатор:</b>{` ${teacher.id}`}</p>
                 <p><b>Возраст:</b>{` ${teacher.age}`}</p>
@@ -75,20 +44,8 @@ function Teacher({teacher, handlerTeachers, subject}) {
                 </p>
                 </div>: <p><b>Зарегистрирован:</b> Нет</p>}
             </Card>
-            <DeleteTeacherModal
-                teacherId={teacher.id}
-                isOpen={isOpenDeleteModal}
-                handler={setIsOpenDeleteModal}
-                handlerTeachers={handlerTeachers}
-                subject={subject}
-            />
-            <EditTeacherModal
-                teacherId={teacher.id}
-                handler={setIsOpenEditModal}
-                modalIsOpen={isOpenEditModal}
-            />
         </>
     )
 }
 
-export default Teacher;
+export default ClassroomTeacher;
