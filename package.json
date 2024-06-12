@@ -9,6 +9,9 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "rollup": "npm:@rollup/wasm-node"
+  },
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
     "antd": "^5.16.2",
