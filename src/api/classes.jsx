@@ -47,7 +47,6 @@ export async function getClassInfo(classId, handlerTeachers, classesOptions, han
             })
 
             if (clsInfo.classroom_teacher !== null) {
-                console.log(clsInfo.classroom_teacher)
                 classroomTeacher = (
                     <ClassroomTeacher
                         teacher={clsInfo.classroom_teacher}
@@ -76,5 +75,11 @@ export async function setClassTeacher(teacherId, classId){
         (response) => {
             return response
         }
+    )
+}
+
+export async function addNewClass(values) {
+    return await axios.post(`http://localhost:5000/class/add`, values).then(
+        response => response
     )
 }

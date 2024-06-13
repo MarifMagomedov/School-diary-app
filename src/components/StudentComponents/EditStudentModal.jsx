@@ -39,9 +39,6 @@ function EditStudentModal({studentId, handler, modalIsOpen, classId, handlerStud
                 <Button form={form[0]} key="submit" type="primary" onClick={handleSubmit}>
                     Сохранить
                 </Button>,
-                <Button key="cancel" onClick={handler}>
-                    Отмена
-                </Button>
             ]}
         >
             <Space direction="vertical" style={{width: '100%', justifyContent: 'center'}}>

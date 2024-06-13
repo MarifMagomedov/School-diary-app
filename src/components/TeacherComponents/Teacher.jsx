@@ -87,7 +87,7 @@ function Teacher({teacher, handlerTeachers, subject}) {
                 handler={setIsOpenEditModal}
                 modalIsOpen={isOpenEditModal}
                 handlerTeachers={handlerTeachers}
-                subject={subject}
+                subjectId={subject}
             />
         </>
     )

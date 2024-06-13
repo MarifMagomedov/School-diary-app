@@ -49,7 +49,7 @@ function SetTeacherModal({modalIsOpen, handlerTeacher, handler, classId, teacher
                     >
                         <List.Item.Meta
                             title={`${item.name} ${item.surname} ${item.middle_name}`}
-                            description={`Предметы: ${item.subjects.map(item => item.subject_name)}, Возраст: ${item.age}`}
+                            description={`Предметы: ${item.subjects.map(item => item.subject_name).join(', ')}, Возраст: ${item.age}`}
                         />
                     </List.Item>
                 )}

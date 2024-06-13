@@ -23,3 +23,10 @@ export async function getSubjectsOptions() {
         return getItem('Предметы', 'subjects', null, responseSubjects)
     })
 }
+
+
+export async function addNewSubject(values) {
+    return await axios.post('http://localhost:5000/subjects/add', values).then(
+        response => response
+    )
+}
