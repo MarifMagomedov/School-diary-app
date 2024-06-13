@@ -1,9 +1,11 @@
 import {Button, Form, Input, InputNumber, Modal, Select, Space, Typography} from "antd";
 import {getSubjectsOptions} from "../../api/subjects.jsx";
 import {useEffect, useState} from "react";
+import {getStudentsCard, updateStudent} from "../../api/students.jsx";
+import {getTeachersCard, updateTeacher} from "../../api/teachers.jsx";
 
 
-function EditTeacherModal({teacherId, handler, modalIsOpen}) {
+function EditTeacherModal({teacherId, handler, modalIsOpen, subjectId, handlerTeachers}) {
     const form = Form.useForm()
     const [subjectOptions, setSubjectOptions] = useState([])
 
@@ -11,8 +13,18 @@ function EditTeacherModal({teacherId, handler, modalIsOpen}) {
         getSubjectsOptions().then(subjects => setSubjectOptions(subjects.children))
     }, []);
 
-    function handleSubmit() {
-        return 1
+    async function handleSubmit() {
+        try {
+            const values = await form[0].validateFields()
+            const response = await updateTeacher(values, teacherId).then(r => r)
+            if (response.status === 200) {
+                const newStudents = await getTeachersCard(subjectId, handlerTeachers).then(cards => cards)
+                handlerTeachers(newStudents)
+                handler(false)
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (

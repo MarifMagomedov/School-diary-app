@@ -86,6 +86,8 @@ function Teacher({teacher, handlerTeachers, subject}) {
                 teacherId={teacher.id}
                 handler={setIsOpenEditModal}
                 modalIsOpen={isOpenEditModal}
+                handlerTeachers={handlerTeachers}
+                subject={subject}
             />
         </>
     )

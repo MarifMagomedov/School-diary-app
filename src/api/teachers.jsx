@@ -34,3 +34,9 @@ export async function addNewTeacher(values){
         response => response
     );
 }
+
+export async function updateTeacher(values, teacherId){
+    await axios.put(`http://localhost:5000/teachers/${teacherId}`, values).then(
+        response => response
+    )
+}
