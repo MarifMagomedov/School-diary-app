@@ -1,37 +1,74 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {LockOutlined, MailOutlined, NumberOutlined, SkypeOutlined, WhatsAppOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Form, Input, Select, Typography} from 'antd';
-import axios from 'axios'
+import {Button, Form, Input, message, Select, Typography} from 'antd';
+import {registerUser} from "../../api/auth.jsx";
+import {useNavigate} from "react-router-dom";
+import * as r from "antd";
 
 
-function AuthComponent() {
+function RegisterUser() {
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const form = Form.useForm()
     const userTypes = [
         {
-            label: "Чорт немытый",
-            value: "student"
+            label: "Терпила",
+            value: 2
         },
         {
             label: "Учитель",
-            value: "teacher"
+            value: 1
         },
         {
             label: "Менеджер",
-            value: "manager"
+            value: 3
         }
     ]
+    // const userTypes = await getUserTypes().then(types => types).map(
+    //     type => {return {
+    //         label: type.name,
+    //         value: type.id
+    //     }}
+    // );
 
-    const onFinish = (values) => {
-        axios.post('http://127.0.0.1:5000/auth/register', values).then((response) => {
-            if (response.status === 201) {
-                console.log(response.data)
-            } else {
-                console.log(response.data)
+    useEffect(() => {
+
+    }, []);
+
+    async function onFinish() {
+        const values = await form[0].validateFields();
+        try {
+            const response = await registerUser(values).then(r => r)
+            messageApi.open({
+                type: "success",
+                content: response.data.message
+            });
+            localStorage.setItem("token", response.data.token);
+            switch (values.role){
+                case 1:
+                    console.log(1)
+                    navigate(`/teacher`, { replace: false })
+                    break
+                case 2:
+                    console.log(2)
+                    navigate(`/student`, { replace: false })
+                    break
+                case 3:
+                    console.log(3)
+                    navigate(`/manager`, { replace: false })
+                    break
             }
-        })
+        } catch(error) {
+            messageApi.open({
+                type: "error",
+                content: error.response.data.detail,
+            })
+        }
     }
 
     return (
         <>
+            {contextHolder}
             <Typography.Title level={1}>Регистрация</Typography.Title>
             <Form
                 name="normal_login"
@@ -41,9 +78,11 @@ function AuthComponent() {
                 }}
                 onFinish={onFinish}
                 style={{width:'100%'}}
+                form={form[0]}
             >
                 <Form.Item
-                    name="user_type"
+                    name="role"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -54,7 +93,8 @@ function AuthComponent() {
                     <Select placeholder="Выберите тип пользователя" options={userTypes}/>
                 </Form.Item>
                 <Form.Item
-                    name="user_id"
+                    name="register_code"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -66,10 +106,12 @@ function AuthComponent() {
                 </Form.Item>
                 <Form.Item
                     name="email"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
                             message: 'Пожалуйста, введите свою почту!',
+                            type: 'email'
                         },
                     ]}
                 >
@@ -80,7 +122,8 @@ function AuthComponent() {
                     />
                 </Form.Item>
                 <Form.Item
-                    name="password"
+                    name="hashed_password"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -92,20 +135,6 @@ function AuthComponent() {
                         prefix={<LockOutlined className="site-form-item-icon"/>}
                         type="password"
                         placeholder="Пароль"
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="password_replay"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста, введите свой пароль!',
-                        },
-                    ]}
-                >
-                    <Input
-                        prefix={<LockOutlined className="site-form-item-icon"/>}
-                        placeholder="Пароль еще раз"
                     />
                 </Form.Item>
                 <Form.Item
@@ -138,7 +167,7 @@ function AuthComponent() {
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight: 10}}>
                         Зарегистрироваться
                     </Button>
-                    <a href="">Войти</a>
+                    <a onClick={() => navigate('/login')}>Войти</a>
                 </Form.Item>
             </Form>
         </>
@@ -146,4 +175,4 @@ function AuthComponent() {
 }
 
 
-export default AuthComponent;
+export default RegisterUser;

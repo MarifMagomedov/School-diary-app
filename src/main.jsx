@@ -4,15 +4,20 @@ import './index.css'
 import RegisterPage from './pages/authPages/RegisterPage.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ManagerPage from "./pages/managerPages/ManagerPage.jsx";
+import LoginPage from "./pages/authPages/LoginPage.jsx";
 
 const router = createBrowserRouter(
     [
         {
-            path: '/School-diary-app-frontend/',
+            path: '/register',
             element: <RegisterPage/>
         },
         {
-            path: '/School-diary-app-frontend/manager',
+            path: '/login',
+            element: <LoginPage/>
+        },
+        {
+            path: '/manager',
             element: <ManagerPage/>
         }
     ]

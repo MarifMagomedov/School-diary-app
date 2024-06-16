@@ -1,16 +1,16 @@
-import RegisterUser from "../../components/authComponents/RegisterUser.jsx";
+import LoginUser from "../../components/authComponents/LoginUser.jsx";
 
 
-const RegisterPage = () => {
+const LoginPage = () => {
     return (
         <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "80%", flexDirection: "column"}}>
             <div className='rounded-lg drop-shadow' style={{backgroundColor: 'white'}}>
                 <div className="" style={{width: "500px", padding: "30px", display: "flex", flexDirection: "column", alignItems: "center"}}>
-                    <RegisterUser/>
+                    <LoginUser/>
                 </div>
             </div>
         </div>
     )
 }
 
-export default RegisterPage
+export default LoginPage

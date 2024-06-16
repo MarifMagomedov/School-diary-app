@@ -17,7 +17,6 @@ function ManagerPage() {
     useEffect(() => {
         getSubjectsOptions().then(subjects => setSubjectsOptions(subjects))
         getClassesOptions().then(classes => setClassesOptions(classes))
-
     }, []);
 
     return (

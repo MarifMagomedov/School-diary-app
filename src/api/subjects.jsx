@@ -13,7 +13,11 @@ function getItem(label, key, icon, children, type) {
 
 
 export async function getSubjectsOptions() {
-    return await axios.get('http://localhost:5000/subjects/all').then((response) => {
+    return await axios.get('http://localhost:5000/subjects/all', {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then((response) => {
         let responseSubjects = response.data.map((item) => {
             return getItem(
                 item.subject_name,
@@ -26,7 +30,11 @@ export async function getSubjectsOptions() {
 
 
 export async function addNewSubject(values) {
-    return await axios.post('http://localhost:5000/subjects/add', values).then(
+    return await axios.post('http://localhost:5000/subjects/add', values, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(
         response => response
     )
 }

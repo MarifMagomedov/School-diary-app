@@ -3,14 +3,22 @@ import Teacher from "../components/TeacherComponents/Teacher.jsx";
 
 
 export async function getFreeTeachers() {
-    return await axios.get(`http://localhost:5000/teachers/free`).then(response => {
+    return await axios.get(`http://localhost:5000/teachers/free`, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(response => {
         return response.data;
     })
 }
 
 
 export async function getTeachersCard(subjectId, handlerTeachers) {
-    return await axios.get(`http://localhost:5000/teachers/${subjectId}`).then(
+    return await axios.get(`http://localhost:5000/teachers/${subjectId}`, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(
         (response) => {
             return response.data.map(teacher => {
                 return <Teacher
@@ -24,19 +32,31 @@ export async function getTeachersCard(subjectId, handlerTeachers) {
 }
 
 export async function deleteTeacher(teacherId) {
-    return await axios.delete(`http://localhost:5000/teachers/${teacherId}`).then(
+    return await axios.delete(`http://localhost:5000/teachers/${teacherId}`, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(
         response => response.status
     );
 }
 
 export async function addNewTeacher(values){
-    return await axios.post('http://localhost:5000/teachers/add', values).then(
+    return await axios.post('http://localhost:5000/teachers/add', values, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(
         response => response
     );
 }
 
 export async function updateTeacher(values, teacherId){
-    return await axios.put(`http://localhost:5000/teachers/${teacherId}`, values).then(
+    return await axios.put(`http://localhost:5000/teachers/${teacherId}`, values, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    }).then(
         response => response
     )
 }
