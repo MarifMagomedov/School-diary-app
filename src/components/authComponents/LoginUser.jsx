@@ -41,7 +41,9 @@ const navigate = useNavigate();
                 type: "success",
                 content: response.data.message
             })
+            console.log(response.data);
             localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user_id', response.data.user_id)
             switch (values.role){
                 case 1:
                     navigate(`/teacher`, { replace: false })

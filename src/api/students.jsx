@@ -7,7 +7,8 @@ export async function deleteStudent(studentId) {
     return await axios.delete(
         `http://localhost:5000/students/${studentId}`, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token"),
+            role: localStorage.getItem("role")
         }
     }).then(response => response.status);
 }
@@ -16,7 +17,7 @@ export async function deleteStudent(studentId) {
 export async function getStudentsCard(classId, handlerStudents) {
     return await axios.get(`http://localhost:5000/students/${classId}`, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token")
         }
     }).then(response => {
         return response.data.map(student => {
@@ -34,7 +35,7 @@ export async function getStudentsCard(classId, handlerStudents) {
 export async function addStudent(values) {
     return await axios.post(`http://localhost:5000/students/add`, values, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token")
         }
     }).then(
         response => response
@@ -44,9 +45,19 @@ export async function addStudent(values) {
 export async function updateStudent(values, studentId) {
     return await axios.put(`http://localhost:5000/students/${studentId}`, values, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token")
         }
     }).then(
         response => response
     )
+}
+
+
+export async function getStudentSchedule(){
+    console.log(localStorage.getItem("token"))
+    return await axios.get(`http://localhost:5000/students/${localStorage.getItem('user_id')}/schedule`, {
+        headers: {
+            Authorization:"Bearer " + localStorage.getItem("token")
+        }
+    }).then(response => response)
 }

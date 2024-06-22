@@ -20,7 +20,8 @@ function getItem(label, key, icon, children, type) {
 export async function getClassesOptions() {
     return await axios.get('http://localhost:5000/class/all', {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token"),
+            role: localStorage.getItem("role")
         }
     }).then((response) => {
         const responseClasses = response.data.map((item) => {
@@ -37,7 +38,8 @@ export async function getClassesOptions() {
 export async function getClassInfo(classId, handlerTeachers, classesOptions, handlerStudents) {
     return await axios.get(`http://localhost:5000/class/${classId}`, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token"),
+            role: localStorage.getItem("role")
         }
     }).then((response) => {
         let classroomTeacher
@@ -80,7 +82,7 @@ export async function getClassInfo(classId, handlerTeachers, classesOptions, han
 export async function setClassTeacher(teacherId, classId){
     return await axios.patch(`http://localhost:5000/class/${classId}/teacher/${teacherId}`, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token")
         }
     }).then(
         (response) => {
@@ -92,7 +94,7 @@ export async function setClassTeacher(teacherId, classId){
 export async function addNewClass(values) {
     return await axios.post(`http://localhost:5000/class/add`, values, {
         headers: {
-            token: localStorage.getItem("token")
+            Authorization:"Bearer " + localStorage.getItem("token")
         }
     }).then(
         response => response
