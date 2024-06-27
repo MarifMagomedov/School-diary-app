@@ -2,8 +2,8 @@ import axios from "axios";
 import Teacher from "../components/TeacherComponents/Teacher.jsx";
 import Student from "../components/StudentComponents/Student.jsx";
 import {Typography} from "antd";
-import SetTeacher from "../components/TeacherComponents/SetClassTeacher.jsx";
-import ClassroomTeacher from "../components/TeacherComponents/ClassroomTeacher.jsx";
+import SetTeacher from "../components/ClassComponents/SetClassTeacher.jsx";
+import ClassroomTeacher from "../components/ClassComponents/ClassroomTeacher.jsx";
 
 
 function getItem(label, key, icon, children, type) {

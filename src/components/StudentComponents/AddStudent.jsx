@@ -24,6 +24,7 @@ function AddStudentModal({classId, modalIsOpen, handler, subjectOptions, handler
     return (
         <div>
             <Modal
+                destroyOnClose
                 centered
                 open={modalIsOpen}
                 onCancel={handler}

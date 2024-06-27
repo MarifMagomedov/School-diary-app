@@ -23,6 +23,7 @@ function AddClassModal({handler, handlerClasses, modalIsOpen}) {
 
     return (
         <Modal
+            destroyOnClose
             centered
             open={modalIsOpen}
             onCancel={() => handler(false)}

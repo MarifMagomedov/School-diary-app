@@ -29,6 +29,7 @@ function EditTeacherModal({teacherId, handler, modalIsOpen, subjectId, handlerTe
 
     return (
         <Modal
+            destroyOnClose
             centered
             open={modalIsOpen}
             onOk={handleSubmit}

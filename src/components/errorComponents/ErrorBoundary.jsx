@@ -1,6 +1,6 @@
 import {Component, useState} from "react";
-import UnauthorizedError from "./UnauthorizedError.jsx";
-import NotFoundError from "./NotFoundError.jsx";
+import UnauthorizedError from "./errorStatusComponents/UnauthorizedError.jsx";
+import NotFoundError from "./errorStatusComponents/NotFoundError.jsx";
 
 
 function ErrorBoundary({errorStatus, errorDetail}) {

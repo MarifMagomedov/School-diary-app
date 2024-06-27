@@ -1,23 +1,23 @@
-import {Avatar, Menu, Space} from "antd";
+import {Avatar, Menu} from "antd";
 import {useEffect, useState} from "react";
-import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
-import {checkUser} from "../../api/auth.jsx";
-import {Link, useNavigate} from "react-router-dom";
+import {UserOutlined} from "@ant-design/icons";
+import {Link, useLocation} from "react-router-dom";
 
 
 function StudentPageMenu() {
     const [selectedKey, setSelectedKey] = useState('');
+    const location = useLocation()
     const items = [
         {
             label: 'Дневник',
             children: [
                 {
-                    label: <Link to={'diary'}>Дневник</Link>,
+                    label: <Link to='diary'>Дневник</Link>,
                     key: 'diary',
                 },
                 {
-                    label: <Link to={'homeworks'}>Домашнее задание</Link>,
-                    key: 'homework',
+                    label: <Link to='homeworks'>Домашнее задание</Link>,
+                    key: 'homeworks',
                 },
             ]
         },
@@ -25,8 +25,12 @@ function StudentPageMenu() {
             label: 'Оценки',
             children: [
                 {
-                    label: '' ,
-                    key: '',
+                    label: <Link to='all_marks'>Все оценки</Link>,
+                    key: 'all_marks',
+                },
+                {
+                    label: 'Итоговые оценки',
+                    key: 'final_marks',
                 }
             ]
         },
@@ -75,6 +79,11 @@ function StudentPageMenu() {
         },
     ]
 
+    useEffect(() => {
+        const thisLocation = location.pathname.split('/')
+        setSelectedKey(thisLocation[thisLocation.length - 1])
+    }, []);
+
 
     return (
         <div>
@@ -83,7 +92,7 @@ function StudentPageMenu() {
                 mode="horizontal"
                 items={items}
                 selectedKeys={[selectedKey]}
-                onClick={(item) => (item.key !== 'logo') ? setSelectedKey(item.key): ''}
+                onClick={(item) => setSelectedKey(item.key)}
             />
         </div>
     )

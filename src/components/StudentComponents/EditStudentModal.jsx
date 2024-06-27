@@ -31,6 +31,7 @@ function EditStudentModal({studentId, handler, modalIsOpen, classId, handlerStud
 
     return (
         <Modal
+            destroyOnClose
             centered
             open={modalIsOpen}
             onOk={handleSubmit}

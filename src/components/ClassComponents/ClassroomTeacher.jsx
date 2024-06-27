@@ -1,6 +1,6 @@
 import {Button, Card, Modal} from "antd";
 import {useState} from "react";
-import DeleteTeacherModal from "./DeleteTeacherModal.jsx";
+import DeleteTeacherModal from "../TeacherComponents/DeleteTeacherModal.jsx";
 
 
 function ClassroomTeacher({teacher}) {

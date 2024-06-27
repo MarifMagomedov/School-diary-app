@@ -2,7 +2,7 @@ import {Button, List, Modal, Space} from "antd";
 import {useEffect, useState} from "react";
 import {getFreeTeachers} from "../../api/teachers.jsx";
 import {setClassTeacher} from "../../api/classes.jsx";
-import Teacher from "./Teacher.jsx";
+import Teacher from "../TeacherComponents/Teacher.jsx";
 import ClassroomTeacher from "./ClassroomTeacher.jsx";
 
 

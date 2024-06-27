@@ -22,6 +22,7 @@ function AddSubjectModal({handler, handlerSubjects, modalIsOpen}) {
 
     return (
         <Modal
+            destroyOnClose
             centered
             open={modalIsOpen}
             onCancel={() => handler(false)}

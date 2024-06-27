@@ -1,9 +1,7 @@
 import StudentPageMenu from "../../components/Menu/StudentPageMenu.jsx";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {checkUser} from "../../api/auth.jsx";
 import ErrorBoundary from "../../components/errorComponents/ErrorBoundary.jsx";
-import Diary from "../../components/diaryComponents/Diary.jsx";
-import {getStudentSchedule} from "../../api/students.jsx";
 import {Outlet} from "react-router-dom";
 
 

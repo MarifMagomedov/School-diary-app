@@ -44,6 +44,7 @@ function RegisterUser() {
                 content: response.data.message
             });
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user_id", response.data.user_id);
             switch (values.role){
                 case 1:
                     console.log(1)

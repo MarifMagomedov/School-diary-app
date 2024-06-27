@@ -36,6 +36,7 @@ function AddTeacherModal({modalIsOpen, handler, subject, handlerTeachers}) {
     return (
         <div>
             <Modal
+                destroyOnClose
                 centered
                 open={modalIsOpen}
                 onCancel={handler}

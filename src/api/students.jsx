@@ -52,12 +52,3 @@ export async function updateStudent(values, studentId) {
     )
 }
 
-
-export async function getStudentSchedule(){
-    console.log(localStorage.getItem("token"))
-    return await axios.get(`http://localhost:5000/students/${localStorage.getItem('user_id')}/schedule`, {
-        headers: {
-            Authorization:"Bearer " + localStorage.getItem("token")
-        }
-    }).then(response => response)
-}

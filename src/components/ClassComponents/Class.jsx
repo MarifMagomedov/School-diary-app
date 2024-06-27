@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {getClassInfo} from "../../api/classes.jsx";
 import {List, Pagination, Space, Typography} from "antd";
 import AddStudent from "../StudentComponents/AddStudent.jsx";
-import SetTeacher from "../TeacherComponents/SetClassTeacher.jsx";
+import SetTeacher from "./SetClassTeacher.jsx";
 
 
 
